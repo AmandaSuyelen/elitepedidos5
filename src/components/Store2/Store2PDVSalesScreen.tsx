@@ -4,7 +4,7 @@ import { useStore2Products } from '../../hooks/useStore2Products';
 import { useStore2Sales, useStore2Cart } from '../../hooks/useStore2Sales';
 import { useStore2PDVCashRegister } from '../../hooks/useStore2PDVCashRegister';
 import { PDVOperator } from '../../types/pdv';
-import WeightInputModal from '../PDV/WeightInputModal';
+import { PesagemModal } from '../PDV/PesagemModal';
 
 interface Store2PDVSalesScreenProps {
   operator?: PDVOperator;
@@ -34,7 +34,7 @@ const Store2PDVSalesScreen: React.FC<Store2PDVSalesScreenProps> = ({ operator, s
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [showWeightInput, setShowWeightInput] = useState(false);
+  const [showWeightModal, setShowWeightModal] = useState(false);
   const [selectedWeighableProduct, setSelectedWeighableProduct] = useState<any>(null);
 
   const categories = [
@@ -67,17 +67,18 @@ const Store2PDVSalesScreen: React.FC<Store2PDVSalesScreenProps> = ({ operator, s
   const handleProductClick = (product: any) => {
     if (product.is_weighable) {
       setSelectedWeighableProduct(product);
-      setShowWeightInput(true);
+      setShowWeightModal(true);
     } else {
       addItem(product, 1);
     }
   };
 
-  const handleWeightConfirm = (weightInKg: number) => {
-    if (selectedWeighableProduct && weightInKg > 0) {
+  const handleWeightConfirm = (weightInGrams: number) => {
+    if (selectedWeighableProduct && weightInGrams > 0) {
+      const weightInKg = weightInGrams / 1000;
       addItem(selectedWeighableProduct, 1, weightInKg);
     }
-    setShowWeightInput(false);
+    setShowWeightModal(false);
     setSelectedWeighableProduct(null);
   };
 
@@ -352,14 +353,15 @@ const Store2PDVSalesScreen: React.FC<Store2PDVSalesScreenProps> = ({ operator, s
       </div>
 
       {/* Weight Modal */}
-      {showWeightInput && selectedWeighableProduct && (
-        <WeightInputModal
-          product={selectedWeighableProduct}
+      {showWeightModal && selectedWeighableProduct && (
+        <PesagemModal
+          produto={selectedWeighableProduct}
           onConfirmar={handleWeightConfirm}
           onFechar={() => {
-            setShowWeightInput(false);
+            setShowWeightModal(false);
             setSelectedWeighableProduct(null);
           }}
+          useDirectScale={true}
         />
       )}
     </div>
