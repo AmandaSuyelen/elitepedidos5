@@ -498,6 +498,7 @@ const TableSalesPanel: React.FC<TableSalesPanelProps> = ({ storeId, operatorName
   }
 
   return (
+    <>
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -853,7 +854,7 @@ const TableSalesPanel: React.FC<TableSalesPanelProps> = ({ storeId, operatorName
           useDirectScale={true}
         />
       )}
-    </div>
+    </>
   );
 };
 
