@@ -499,346 +499,347 @@ const TableSalesPanel: React.FC<TableSalesPanelProps> = ({ storeId, operatorName
 
   return (
     <>
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-            <Users size={24} className="text-indigo-600" />
-            Vendas de Mesas - Loja {storeId}
-          </h2>
-          <p className="text-gray-600">Gerencie vendas presenciais por mesa</p>
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+              <Users size={24} className="text-indigo-600" />
+              Vendas de Mesas - Loja {storeId}
+            </h2>
+            <p className="text-gray-600">Gerencie vendas presenciais por mesa</p>
+          </div>
+          <button
+            onClick={() => {
+              fetchTables();
+              fetchProducts();
+            }}
+            className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+          >
+            <RefreshCw size={16} />
+            Atualizar
+          </button>
         </div>
-        <button
-          onClick={() => {
-            fetchTables();
-            fetchProducts();
-          }}
-          className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
-        >
-          <RefreshCw size={16} />
-          Atualizar
-        </button>
-      </div>
 
-      {/* Supabase Configuration Warning */}
-      {!supabaseConfigured && (
-        <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
-          <div className="flex items-center gap-3">
-            <div className="bg-yellow-100 rounded-full p-2">
-              <AlertCircle size={20} className="text-yellow-600" />
-            </div>
-            <div>
-              <h3 className="font-medium text-yellow-800">Modo Demonstração</h3>
-              <p className="text-yellow-700 text-sm">
-                Supabase não configurado. Funcionalidades limitadas.
-              </p>
+        {/* Supabase Configuration Warning */}
+        {!supabaseConfigured && (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+            <div className="flex items-center gap-3">
+              <div className="bg-yellow-100 rounded-full p-2">
+                <AlertCircle size={20} className="text-yellow-600" />
+              </div>
+              <div>
+                <h3 className="font-medium text-yellow-800">Modo Demonstração</h3>
+                <p className="text-yellow-700 text-sm">
+                  Supabase não configurado. Funcionalidades limitadas.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Mesas */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Mesas Disponíveis</h3>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {tables.map(table => (
-              <div
-                key={table.id}
-                onClick={() => {
-                  if (table.status === 'livre') {
-                    setSelectedTable(table);
-                  } else if (table.current_sale) {
-                    setSelectedTable(table);
-                    setCurrentSale(table.current_sale);
-                  }
-                }}
-                className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                  table.status === 'livre'
-                    ? 'border-green-200 bg-green-50 hover:bg-green-100'
-                    : table.status === 'ocupada'
-                    ? 'border-red-200 bg-red-50 hover:bg-red-100'
-                    : 'border-yellow-200 bg-yellow-50 hover:bg-yellow-100'
-                } ${selectedTable?.id === table.id ? 'ring-2 ring-indigo-500' : ''}`}
-              >
-                <div className="text-center">
-                  <h4 className="font-semibold text-gray-800">{table.name}</h4>
-                  <p className="text-sm text-gray-600">Capacidade: {table.capacity}</p>
-                  <div className={`mt-2 px-2 py-1 rounded-full text-xs font-medium ${
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Mesas */}
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Mesas Disponíveis</h3>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {tables.map(table => (
+                <div
+                  key={table.id}
+                  onClick={() => {
+                    if (table.status === 'livre') {
+                      setSelectedTable(table);
+                    } else if (table.current_sale) {
+                      setSelectedTable(table);
+                      setCurrentSale(table.current_sale);
+                    }
+                  }}
+                  className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
                     table.status === 'livre'
-                      ? 'bg-green-100 text-green-800'
+                      ? 'border-green-200 bg-green-50 hover:bg-green-100'
                       : table.status === 'ocupada'
-                      ? 'bg-red-100 text-red-800'
-                      : 'bg-yellow-100 text-yellow-800'
-                  }`}>
-                    {table.status === 'livre' ? 'Livre' : 
-                     table.status === 'ocupada' ? 'Ocupada' : 
-                     table.status === 'aguardando_conta' ? 'Aguardando Conta' : 'Limpeza'}
+                      ? 'border-red-200 bg-red-50 hover:bg-red-100'
+                      : 'border-yellow-200 bg-yellow-50 hover:bg-yellow-100'
+                  } ${selectedTable?.id === table.id ? 'ring-2 ring-indigo-500' : ''}`}
+                >
+                  <div className="text-center">
+                    <h4 className="font-semibold text-gray-800">{table.name}</h4>
+                    <p className="text-sm text-gray-600">Capacidade: {table.capacity}</p>
+                    <div className={`mt-2 px-2 py-1 rounded-full text-xs font-medium ${
+                      table.status === 'livre'
+                        ? 'bg-green-100 text-green-800'
+                        : table.status === 'ocupada'
+                        ? 'bg-red-100 text-red-800'
+                        : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {table.status === 'livre' ? 'Livre' : 
+                       table.status === 'ocupada' ? 'Ocupada' : 
+                       table.status === 'aguardando_conta' ? 'Aguardando Conta' : 'Limpeza'}
+                    </div>
+                    {table.current_sale && (
+                      <p className="text-xs text-gray-500 mt-1">
+                        Total: {formatPrice(table.current_sale.total_amount)}
+                      </p>
+                    )}
                   </div>
-                  {table.current_sale && (
-                    <p className="text-xs text-gray-500 mt-1">
-                      Total: {formatPrice(table.current_sale.total_amount)}
-                    </p>
-                  )}
                 </div>
+              ))}
+            </div>
+
+            {tables.length === 0 && (
+              <div className="text-center py-8">
+                <Users size={48} className="mx-auto text-gray-300 mb-4" />
+                <p className="text-gray-500">Nenhuma mesa cadastrada</p>
               </div>
-            ))}
+            )}
           </div>
 
-          {tables.length === 0 && (
-            <div className="text-center py-8">
-              <Users size={48} className="mx-auto text-gray-300 mb-4" />
-              <p className="text-gray-500">Nenhuma mesa cadastrada</p>
-            </div>
-          )}
-        </div>
+          {/* Venda Atual */}
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">
+              {selectedTable ? `${selectedTable.name} - ${currentSale ? 'Venda Ativa' : 'Nova Venda'}` : 'Selecione uma Mesa'}
+            </h3>
 
-        {/* Venda Atual */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            {selectedTable ? `${selectedTable.name} - ${currentSale ? 'Venda Ativa' : 'Nova Venda'}` : 'Selecione uma Mesa'}
-          </h3>
-
-          {selectedTable && !currentSale && (
-            <div className="space-y-4 mb-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Nome do Cliente
-                </label>
-                <input
-                  type="text"
-                  value={customerName}
-                  onChange={(e) => setCustomerName(e.target.value)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  placeholder="Nome do cliente"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Número de Pessoas
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  value={customerCount}
-                  onChange={(e) => setCustomerCount(parseInt(e.target.value) || 1)}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                />
-              </div>
-
-              <button
-                onClick={() => openTable(selectedTable)}
-                disabled={saving || !customerName.trim()}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-300 text-white py-2 rounded-lg font-medium transition-colors"
-              >
-                {saving ? 'Abrindo...' : 'Abrir Mesa'}
-              </button>
-            </div>
-          )}
-
-          {currentSale && (
-            <div className="space-y-4">
-              {/* Informações da Venda */}
-              <div className="bg-gray-50 rounded-lg p-4">
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span className="text-gray-600">Venda:</span>
-                    <span className="font-medium ml-1">#{currentSale.sale_number}</span>
-                  </div>
-                  <div>
-                    <span className="text-gray-600">Cliente:</span>
-                    <span className="font-medium ml-1">{currentSale.customer_name}</span>
-                  </div>
-                  <div>
-                    <span className="text-gray-600">Pessoas:</span>
-                    <span className="font-medium ml-1">{currentSale.customer_count}</span>
-                  </div>
-                  <div>
-                    <span className="text-gray-600">Total:</span>
-                    <span className="font-bold text-indigo-600 ml-1">
-                      {formatPrice(currentSale.total_amount)}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Carrinho */}
-              <div>
-                <h4 className="font-medium text-gray-800 mb-3">Adicionar Itens</h4>
-                
-                {/* Busca de Produtos */}
-                <div className="mb-4">
-                  <div className="relative">
-                    <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                    <input
-                      type="text"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      placeholder="Buscar produtos..."
-                      className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    />
-                  </div>
+            {selectedTable && !currentSale && (
+              <div className="space-y-4 mb-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Nome do Cliente
+                  </label>
+                  <input
+                    type="text"
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    placeholder="Nome do cliente"
+                  />
                 </div>
 
-                {/* Lista de Produtos */}
-                <div className="max-h-40 overflow-y-auto mb-4">
-                  <div className="grid grid-cols-1 gap-2">
-                    {filteredProducts.map(product => (
-                      <div
-                        key={product.id}
-                        onClick={() => handleProductClick(product)}
-                        className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer"
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
-                            {product.is_weighable ? (
-                              <Scale size={16} className="text-indigo-600" />
-                            ) : (
-                              <Package size={16} className="text-gray-400" />
-                            )}
-                          </div>
-                          <div>
-                            <p className="font-medium text-gray-800 text-sm">{product.name}</p>
-                            <p className="text-xs text-gray-500">{product.code}</p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          {product.is_weighable ? (
-                            <p className="font-semibold text-indigo-600 text-sm">
-                              {formatPrice((product.price_per_gram || 0) * 1000)}/kg
-                            </p>
-                          ) : (
-                            <p className="font-semibold text-indigo-600 text-sm">
-                              {formatPrice(product.unit_price || 0)}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Número de Pessoas
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={customerCount}
+                    onChange={(e) => setCustomerCount(parseInt(e.target.value) || 1)}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  />
                 </div>
 
-                {/* Itens no Carrinho */}
-                {cartItems.length > 0 && (
-                  <div className="space-y-2 mb-4">
-                    <h5 className="font-medium text-gray-700">Itens a Adicionar:</h5>
-                    {cartItems.map((item, index) => (
-                      <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
-                        <div className="flex-1">
-                          <p className="font-medium text-gray-800 text-sm">{item.product_name}</p>
-                          <div className="flex items-center gap-4 text-xs text-gray-600">
-                            <span>Qtd: {item.quantity}</span>
-                            {item.weight && (
-                              <span>Peso: {(item.weight * 1000).toFixed(0)}g</span>
-                            )}
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold text-indigo-600 text-sm">
-                            {formatPrice(item.subtotal)}
-                          </span>
-                          <button
-                            onClick={() => removeFromCart(item.product_code)}
-                            className="text-red-500 hover:text-red-700 p-1"
-                          >
-                            <Trash2 size={14} />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                    
-                    <div className="flex justify-between items-center pt-2 border-t border-gray-200">
-                      <span className="font-medium">Total a Adicionar:</span>
-                      <span className="font-bold text-indigo-600">{formatPrice(getCartTotal())}</span>
-                    </div>
-
-                    <button
-                      onClick={addItemsToSale}
-                      disabled={saving}
-                      className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-300 text-white py-2 rounded-lg font-medium transition-colors"
-                    >
-                      {saving ? 'Adicionando...' : 'Adicionar à Venda'}
-                    </button>
-                  </div>
-                )}
-
-                {/* Finalizar Venda */}
-                <div className="space-y-4 pt-4 border-t border-gray-200">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Forma de Pagamento
-                    </label>
-                    <select
-                      value={paymentType}
-                      onChange={(e) => setPaymentType(e.target.value as any)}
-                      className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    >
-                      <option value="dinheiro">Dinheiro</option>
-                      <option value="pix">PIX</option>
-                      <option value="cartao_credito">Cartão de Crédito</option>
-                      <option value="cartao_debito">Cartão de Débito</option>
-                    </select>
-                  </div>
-
-                  {paymentType === 'dinheiro' && (
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Troco para:
-                      </label>
-                      <input
-                        type="number"
-                        step="0.01"
-                        value={changeAmount}
-                        onChange={(e) => setChangeAmount(parseFloat(e.target.value) || 0)}
-                        className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        placeholder="Valor para troco"
-                      />
-                    </div>
-                  )}
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Observações
-                    </label>
-                    <textarea
-                      value={notes}
-                      onChange={(e) => setNotes(e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
-                      rows={2}
-                      placeholder="Observações da venda..."
-                    />
-                  </div>
-
-                  <button
-                    onClick={closeSale}
-                    disabled={saving}
-                    className="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-300 text-white py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
-                  >
-                    {saving ? (
-                      <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                        Finalizando...
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircle size={16} />
-                        Finalizar Venda
-                      </>
-                    )}
-                  </button>
-                </div>
+                <button
+                  onClick={() => openTable(selectedTable)}
+                  disabled={saving || !customerName.trim()}
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-300 text-white py-2 rounded-lg font-medium transition-colors"
+                >
+                  {saving ? 'Abrindo...' : 'Abrir Mesa'}
+                </button>
               </div>
             )}
 
-          {!selectedTable && (
-            <div className="text-center py-8">
-              <Users size={48} className="mx-auto text-gray-300 mb-4" />
-              <p className="text-gray-500">Selecione uma mesa para começar</p>
-            </div>
-          )}
+            {currentSale && (
+              <div className="space-y-4">
+                {/* Informações da Venda */}
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="text-gray-600">Venda:</span>
+                      <span className="font-medium ml-1">#{currentSale.sale_number}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Cliente:</span>
+                      <span className="font-medium ml-1">{currentSale.customer_name}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Pessoas:</span>
+                      <span className="font-medium ml-1">{currentSale.customer_count}</span>
+                    </div>
+                    <div>
+                      <span className="text-gray-600">Total:</span>
+                      <span className="font-bold text-indigo-600 ml-1">
+                        {formatPrice(currentSale.total_amount)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Carrinho */}
+                <div>
+                  <h4 className="font-medium text-gray-800 mb-3">Adicionar Itens</h4>
+                  
+                  {/* Busca de Produtos */}
+                  <div className="mb-4">
+                    <div className="relative">
+                      <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                      <input
+                        type="text"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        placeholder="Buscar produtos..."
+                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Lista de Produtos */}
+                  <div className="max-h-40 overflow-y-auto mb-4">
+                    <div className="grid grid-cols-1 gap-2">
+                      {filteredProducts.map(product => (
+                        <div
+                          key={product.id}
+                          onClick={() => handleProductClick(product)}
+                          className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                              {product.is_weighable ? (
+                                <Scale size={16} className="text-indigo-600" />
+                              ) : (
+                                <Package size={16} className="text-gray-400" />
+                              )}
+                            </div>
+                            <div>
+                              <p className="font-medium text-gray-800 text-sm">{product.name}</p>
+                              <p className="text-xs text-gray-500">{product.code}</p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            {product.is_weighable ? (
+                              <p className="font-semibold text-indigo-600 text-sm">
+                                {formatPrice((product.price_per_gram || 0) * 1000)}/kg
+                              </p>
+                            ) : (
+                              <p className="font-semibold text-indigo-600 text-sm">
+                                {formatPrice(product.unit_price || 0)}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Itens no Carrinho */}
+                  {cartItems.length > 0 && (
+                    <div className="space-y-2 mb-4">
+                      <h5 className="font-medium text-gray-700">Itens a Adicionar:</h5>
+                      {cartItems.map((item, index) => (
+                        <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+                          <div className="flex-1">
+                            <p className="font-medium text-gray-800 text-sm">{item.product_name}</p>
+                            <div className="flex items-center gap-4 text-xs text-gray-600">
+                              <span>Qtd: {item.quantity}</span>
+                              {item.weight && (
+                                <span>Peso: {(item.weight * 1000).toFixed(0)}g</span>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold text-indigo-600 text-sm">
+                              {formatPrice(item.subtotal)}
+                            </span>
+                            <button
+                              onClick={() => removeFromCart(item.product_code)}
+                              className="text-red-500 hover:text-red-700 p-1"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                      
+                      <div className="flex justify-between items-center pt-2 border-t border-gray-200">
+                        <span className="font-medium">Total a Adicionar:</span>
+                        <span className="font-bold text-indigo-600">{formatPrice(getCartTotal())}</span>
+                      </div>
+
+                      <button
+                        onClick={addItemsToSale}
+                        disabled={saving}
+                        className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-300 text-white py-2 rounded-lg font-medium transition-colors"
+                      >
+                        {saving ? 'Adicionando...' : 'Adicionar à Venda'}
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Finalizar Venda */}
+                  <div className="space-y-4 pt-4 border-t border-gray-200">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Forma de Pagamento
+                      </label>
+                      <select
+                        value={paymentType}
+                        onChange={(e) => setPaymentType(e.target.value as any)}
+                        className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      >
+                        <option value="dinheiro">Dinheiro</option>
+                        <option value="pix">PIX</option>
+                        <option value="cartao_credito">Cartão de Crédito</option>
+                        <option value="cartao_debito">Cartão de Débito</option>
+                      </select>
+                    </div>
+
+                    {paymentType === 'dinheiro' && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Troco para:
+                        </label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          value={changeAmount}
+                          onChange={(e) => setChangeAmount(parseFloat(e.target.value) || 0)}
+                          className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                          placeholder="Valor para troco"
+                        />
+                      </div>
+                    )}
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Observações
+                      </label>
+                      <textarea
+                        value={notes}
+                        onChange={(e) => setNotes(e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+                        rows={2}
+                        placeholder="Observações da venda..."
+                      />
+                    </div>
+
+                    <button
+                      onClick={closeSale}
+                      disabled={saving}
+                      className="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-300 text-white py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+                    >
+                      {saving ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                          Finalizando...
+                        </>
+                      ) : (
+                        <>
+                          <CheckCircle size={16} />
+                          Finalizar Venda
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+            {!selectedTable && (
+              <div className="text-center py-8">
+                <Users size={48} className="mx-auto text-gray-300 mb-4" />
+                <p className="text-gray-500">Selecione uma mesa para começar</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
