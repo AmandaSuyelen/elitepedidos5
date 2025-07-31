@@ -831,8 +831,7 @@ const TableSalesPanel: React.FC<TableSalesPanelProps> = ({ storeId, operatorName
                     </button>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
             {!selectedTable && (
               <div className="text-center py-8">
