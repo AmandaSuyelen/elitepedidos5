@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Search, Package, Scale, ShoppingCart, Calculator, User, DollarSign, Trash2, Minus } from 'lucide-react';
+import { Plus, Search, Package, Scale, ShoppingCart, Calculator, User, DollarSign, Trash2, Minus, Weight } from 'lucide-react';
 import { usePDVProducts, usePDVSales, usePDVCart } from '../../hooks/usePDV';
 import { usePDVCashRegister } from '../../hooks/usePDVCashRegister';
 import { PDVOperator, PDVProduct } from '../../types/pdv';
-import { PesagemModal } from './PesagemModal';
+import WeightInputModal from './WeightInputModal';
 
 interface PDVSalesScreenProps {
   operator?: PDVOperator;
@@ -34,7 +34,7 @@ const PDVSalesScreen: React.FC<PDVSalesScreenProps> = ({ operator, scaleHook, st
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [showWeightModal, setShowWeightModal] = useState(false);
+  const [showWeightInput, setShowWeightInput] = useState(false);
   const [selectedWeighableProduct, setSelectedWeighableProduct] = useState<PDVProduct | null>(null);
   const [showCart, setShowCart] = useState(false);
 
@@ -68,20 +68,19 @@ const PDVSalesScreen: React.FC<PDVSalesScreenProps> = ({ operator, scaleHook, st
   const handleProductClick = (product: PDVProduct) => {
     if (product.is_weighable) {
       setSelectedWeighableProduct(product);
-      setShowWeightModal(true);
+      setShowWeightInput(true);
     } else {
       addItem(product, 1);
       setShowCart(true);
     }
   };
 
-  const handleWeightConfirm = (weightInGrams: number) => {
-    if (selectedWeighableProduct && weightInGrams > 0) {
-      const weightInKg = weightInGrams / 1000;
+  const handleWeightConfirm = (weightInKg: number) => {
+    if (selectedWeighableProduct && weightInKg > 0) {
       addItem(selectedWeighableProduct, 1, weightInKg);
       setShowCart(true);
     }
-    setShowWeightModal(false);
+    setShowWeightInput(false);
     setSelectedWeighableProduct(null);
   };
 
@@ -356,16 +355,15 @@ const PDVSalesScreen: React.FC<PDVSalesScreenProps> = ({ operator, scaleHook, st
         )}
       </div>
 
-      {/* Weight Modal */}
-      {showWeightModal && selectedWeighableProduct && (
-        <PesagemModal
-          produto={selectedWeighableProduct}
+      {/* Weight Input Modal */}
+      {showWeightInput && selectedWeighableProduct && (
+        <WeightInputModal
+          product={selectedWeighableProduct}
           onConfirmar={handleWeightConfirm}
           onFechar={() => {
-            setShowWeightModal(false);
+            setShowWeightInput(false);
             setSelectedWeighableProduct(null);
           }}
-          useDirectScale={true}
         />
       )}
     </div>
