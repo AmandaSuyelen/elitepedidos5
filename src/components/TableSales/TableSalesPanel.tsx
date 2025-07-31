@@ -841,7 +841,7 @@ const TableSalesPanel: React.FC<TableSalesPanelProps> = ({ storeId, operatorName
             )}
           </div>
         </div>
-      </div>
+    
 
       {/* Modal de Pesagem */}
       {showWeightModal && selectedWeighableProduct && (
