@@ -843,19 +843,20 @@ const TableSalesPanel: React.FC<TableSalesPanelProps> = ({ storeId, operatorName
         </div>
       </div>
 
-      {/* Modal de Pesagem */}
-      {showWeightModal && selectedWeighableProduct && (
-        <PesagemModal
-          produto={selectedWeighableProduct}
-          onConfirmar={handleWeightConfirm}
-          onFechar={() => {
-            setShowWeightModal(false);
-            setSelectedWeighableProduct(null);
-          }}
-          useDirectScale={true}
-        />
-      )}
-    </>
+        {/* Modal de Pesagem */}
+        {showWeightModal && selectedWeighableProduct && (
+          <PesagemModal
+            produto={selectedWeighableProduct}
+            onConfirmar={handleWeightConfirm}
+            onFechar={() => {
+              setShowWeightModal(false);
+              setSelectedWeighableProduct(null);
+            }}
+            useDirectScale={true}
+          />
+        )}
+      </div>
+    </div>
   );
 };
 
