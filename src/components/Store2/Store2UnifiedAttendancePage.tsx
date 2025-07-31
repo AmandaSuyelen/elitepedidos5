@@ -161,58 +161,54 @@ const Store2UnifiedAttendancePage: React.FC<Store2UnifiedAttendancePageProps> = 
 
       <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Navigation Tabs */}
-        <div className="bg-white rounded-xl shadow-sm p-3 md:p-4 mb-4 md:mb-6 print:hidden">
-          <div className="flex flex-wrap gap-2 md:gap-4">
+        <div className="bg-white rounded-xl shadow-sm p-4 mb-6 print:hidden">
+          <div className="flex flex-wrap gap-4">
             <button
               onClick={() => setActiveTab('sales')}
-              className={`px-3 md:px-6 py-2 md:py-3 rounded-lg font-medium transition-colors flex items-center gap-1 md:gap-2 text-sm md:text-base ${
+              className={`px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2 ${
                 activeTab === 'sales'
                   ? 'bg-blue-600 text-white shadow-lg'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              <Calculator size={16} md:size={20} />
-              <span className="hidden sm:inline">Vendas</span>
-              <span className="sm:hidden">PDV</span>
+              <Calculator size={20} />
+              Vendas
             </button>
             
             <button
               onClick={() => setActiveTab('cash')}
-              className={`px-3 md:px-6 py-2 md:py-3 rounded-lg font-medium transition-colors flex items-center gap-1 md:gap-2 text-sm md:text-base ${
+              className={`px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2 ${
                 activeTab === 'cash'
                   ? 'bg-yellow-500 text-white shadow-lg'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              <DollarSign size={16} md:size={20} />
-              <span className="hidden sm:inline">Caixas</span>
-              <span className="sm:hidden">$</span>
+              <DollarSign size={20} />
+              Caixas
             </button>
             
             <button
               onClick={() => setActiveTab('tables')}
-              className={`px-3 md:px-6 py-2 md:py-3 rounded-lg font-medium transition-colors flex items-center gap-1 md:gap-2 text-sm md:text-base ${
+              className={`px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2 ${
                 activeTab === 'tables'
                   ? 'bg-indigo-500 text-white shadow-lg'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              <Users size={16} md:size={20} />
-              <span className="hidden sm:inline">Vendas Mesas</span>
-              <span className="sm:hidden">Mesas</span>
+              <Users size={20} />
+              Vendas Mesas
             </button>
             
             <button
               onClick={() => setActiveTab('history')}
-              className={`px-3 md:px-6 py-2 md:py-3 rounded-lg font-medium transition-colors flex items-center gap-1 md:gap-2 text-sm md:text-base ${
+              className={`px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2 ${
                 activeTab === 'history'
                   ? 'bg-orange-500 text-white shadow-lg'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              <Clock size={16} md:size={20} />
-              <span className="hidden sm:inline">Histórico de Vendas</span>
-              <span className="sm:hidden">Histórico</span>
+              <Clock size={20} />
+              Histórico de Vendas
             </button>
           </div>
         </div>
