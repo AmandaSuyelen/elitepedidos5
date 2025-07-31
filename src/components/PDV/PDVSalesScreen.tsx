@@ -76,7 +76,6 @@ const PDVSalesScreen: React.FC<PDVSalesScreenProps> = ({ operator, scaleHook, st
   };
 
   const handleWeightConfirm = (weightInKg: number) => {
-    if (selectedWeighableProduct && weightInKg > 0) {
       addItem(selectedWeighableProduct, 1, weightInKg);
       setShowCart(true);
     }
@@ -363,7 +362,6 @@ const PDVSalesScreen: React.FC<PDVSalesScreenProps> = ({ operator, scaleHook, st
           onFechar={() => {
             setShowWeightInput(false);
             setSelectedWeighableProduct(null);
-          }}
         />
       )}
     </div>
