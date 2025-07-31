@@ -859,4 +859,4 @@ const TableSalesPanel: React.FC<TableSalesPanelProps> = ({ storeId, operatorName
   );
 };
 
-export default TableSalesPanel;
+export default TableSalesPanel; 
